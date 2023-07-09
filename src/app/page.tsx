@@ -1,27 +1,27 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import Image from "next/image";
+import styles from "./page.module.css";
+import { useState } from "react";
 
 export default function Home() {
+  const [idT, setidT] = useState("");
+  const [aT, setAT] = useState("");
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
+        <p>Get started with PingOne and NextJS</p>
         <div>
+          <div style={{ paddingBottom: "1vh" }}>By</div>
           <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+            href="https://apidocs.pingidentity.com/pingone/main/v1/api/#getting-started-with-the-pingone-apis"
             target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
+            rel="noopener noreferrer">
             <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
+              src="/Ping-Logo.svg"
+              alt="Ping Identity Logo"
+              className={styles.pingLogo}
               width={100}
-              height={24}
+              height={100}
               priority
             />
           </a>
@@ -31,65 +31,74 @@ export default function Home() {
       <div className={styles.center}>
         <Image
           className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
+          src="/PingOne.svg"
+          alt="PingOne Logo"
+          width={620}
+          height={112}
           priority
         />
       </div>
 
-      <div className={styles.grid}>
+      <div
+        style={{
+          borderColor: "white",
+          borderStyle: "solid",
+          borderWidth: 3,
+          padding: ".5rem",
+        }}>
         <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
+          href={authzURL}
+          target="_self">
+          <h1>Login</h1>
         </a>
       </div>
+
+      <div
+        style={{
+          height: "10rem",
+          marginTop: "1rem",
+          marginBottom: "1rem",
+        }}>
+        {aT ? (
+          <p
+            style={{
+              fontSize: "0.75rem",
+              wordBreak: "break-all",
+              height: "100%",
+              overflow: "auto",
+            }}>
+            access token: <br />
+            {aT}
+          </p>
+        ) : (
+          <></>
+        )}
+      </div>
+
+      <div
+        style={{
+          height: "10rem",
+          marginTop: "1rem",
+          marginBottom: "2rem",
+          fontSize: ".75rem",
+        }}>
+        {idT ? (
+          <p
+            style={{
+              fontSize: "0.75rem",
+              wordBreak: "break-all",
+              height: "100%",
+              overflow: "auto",
+            }}>
+            id token: <br />
+            {idT}
+          </p>
+        ) : (
+          <p>
+            Click on <strong>Login</strong> to retrieve tokens
+          </p>
+        )}
+      </div>
     </main>
-  )
+  );
 }
