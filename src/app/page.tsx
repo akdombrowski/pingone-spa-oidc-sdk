@@ -1,10 +1,63 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./page.module.css";
-import { useState } from "react";
+import { SyntheticEvent, useEffect, useRef, useState } from "react";
+import {
+  LogLevel,
+  OidcClient as OIDC_Client,
+  OidcClient,
+  ResponseType,
+  StorageType,
+} from "@pingidentity-developers-experience/ping-oidc-client-sdk";
 
-export default function Home() {
-  const [idT, setidT] = useState("");
+const envID = "333d66b5-d2f0-48d0-8ec0-cf4cafd35d25";
+const clientID = "7cbbc92e-97d7-4f72-97e8-28173f76b8ba";
+const redirectURI = "http://localhost:3000";
+const scopes = "openid";
+const responseType = "code";
+const grantType = "authorization_code";
+
+export const Home = () => {
+  const [idT, setIDT] = useState("");
   const [aT, setAT] = useState("");
+  const oidcClientRef = useRef<OidcClient | null>(null);
+
+  useEffect(() => {
+    const initOIDCClient = async () => {
+      const oidcClient = await OIDC_Client.initializeFromOpenIdConfig(
+        "https://auth.pingone.com/" + envID + "/as",
+        {
+          client_id: clientID,
+          redirect_uri: redirectURI,
+          response_type: ResponseType.AuthorizationCode,
+          scope: scopes,
+          logLevel: LogLevel.None,
+          storageType: StorageType.Session,
+        }
+      );
+
+      oidcClientRef.current = oidcClient;
+    };
+
+    initOIDCClient();
+  }, []);
+
+  const onLogin = async (event: SyntheticEvent) => {
+    event.preventDefault();
+
+    const oidc = oidcClientRef.current;
+    if (oidc) {
+      await oidc.authorize();
+
+      if (await oidc.hasToken()) {
+        const token = await oidc.getToken();
+
+        setAT(token.access_token);
+        setIDT(token.id_token || "");
+      }
+    }
+  };
 
   return (
     <main className={styles.main}>
@@ -46,11 +99,11 @@ export default function Home() {
           borderWidth: 3,
           padding: ".5rem",
         }}>
-        <a
-          href={authzURL}
-          target="_self">
-          <h1>Login</h1>
-        </a>
+        <input
+          type="button"
+          onClick={onLogin}
+          value="Login"
+        />
       </div>
 
       <div
@@ -101,4 +154,6 @@ export default function Home() {
       </div>
     </main>
   );
-}
+};
+
+export default Home;
