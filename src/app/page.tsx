@@ -103,6 +103,10 @@ export const Home = () => {
           type="button"
           onClick={onLogin}
           value="Login"
+          style={{
+            backgroundColor: "transparent",
+            borderColor: "transparent",
+          }}
         />
       </div>
 
